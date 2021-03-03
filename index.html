@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
+        <title>Childhood/ Youthful Faces</title>
+
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Carrois+Gothic+SC&display=swap" rel="stylesheet">
+
+        <!-- Load Leaflet CSS and JS from CDN-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.6.0/leaflet.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.6.0/leaflet.js"></script>
+
+        <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Varela&display=swap" rel="stylesheet">
+        <!-- Load jQuery  -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+        <link href=" https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+
+
+        <!-- Load Font-Awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        <link rel="stylesheet" href="markers/leaflet.extra-markers.min.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/style-desktop.css">
+        <link rel="stylesheet" href="css/loader.css">
+
+
+    </head>
+
+    <body>
+
+        <div id="title">
+            <div id="logo"></div>
+            <div id="header"></div>
+        </div>
+
+        <div id="narration">
+            <div id="contents">
+                <div id="top"></div>
+            </div>
+        </div>
+
+        <div class="loader">Loading...</div>
+        <div id="map">
+
+
+        </div>
+
+        <script type="text/javascript">
+            // Create the Leaflet map with a generic start point
+            var map = L.map('map', {
+                center: [0, 0],
+                zoom: 1,
+                /*scrollWheelZoom: false,*/
+                zoomControl: false
+            });
+
+            /* L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+                maxZoom: 18,
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+                'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1
+            }).addTo(map);*/
+           
+            //analytics img
+            L.Control.Watermark = L.Control.extend({
+                onAdd: function (map) {
+                    var img = L.DomUtil.create('img');
+
+                    img.src = 'img/analytics.png';
+                    img.style.width = '490px';
+
+                    return img;
+                },
+
+                onRemove: function (map) {
+
+                }
+            });
+
+            L.control.watermark = function (opts) {
+                return new L.Control.Watermark(opts);
+            }
+
+            L.control.watermark({
+                position: 'bottomright'
+            }).addTo(map);
+            
+            //title ing
+            L.Control.Watermark = L.Control.extend({
+                onAdd: function (map) {
+                    var img = L.DomUtil.create('img');
+
+                    img.src = 'img/cities.png';
+                    img.style.width = '300px';
+
+                    return img;
+                },
+
+                onRemove: function (map) {
+
+                }
+            });
+
+            L.control.watermark = function (opts) {
+                return new L.Control.Watermark(opts);
+            }
+
+            L.control.watermark({
+                position: 'topright'
+            }).addTo(map);
+            
+
+            //habitatlogo
+            L.Control.Watermark = L.Control.extend({
+                onAdd: function (map) {
+                    var img = L.DomUtil.create('img');
+
+                    img.src = 'img/unhabitat.png';
+                    img.style.width = '300px';
+
+                    return img;
+                },
+
+                onRemove: function (map) {
+
+                }
+            });
+
+            L.control.watermark = function (opts) {
+                return new L.Control.Watermark(opts);
+            }
+
+            L.control.watermark({
+                position: 'topright'
+            }).addTo(map);
+
+            //chart
+            var info = L.control({
+                position: 'bottomright'
+            });
+
+            info.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+                this.update();
+                return this._div;
+            };
+
+            // method that we will use to update the control based on feature properties passed
+            info.update = function (props) {
+                this._div.innerHTML = '<canvas id="doughnut-chart" width="500" height="200"></canvas>'
+            };
+
+            info.addTo(map);
+
+
+            new Chart(document.getElementById("doughnut-chart"), {
+                type: 'bar',
+                data: {
+                    labels: ["North America", "Europe", "Africa", "Latin America", "Asia"],
+                    datasets: [
+                        {
+                           
+                            label: "CHILDHOOD CITY DIVERSITY",
+                            backgroundColor: ["#ef0f5a","#079e23","#066cff","#ff8b00","#d203dd",],
+                            data: [4,5,22,5,6,0]
+                        }
+                    ]
+                },
+                options: {
+                    cutoutPercentage: 65,
+                    legend: {
+                        display: false,
+                        position: 'bottom',
+                    },
+                    title: {
+                        position: 'bottom',
+                        display: false,
+                        text: 'CHILDHOOD CITY DIVERSITY'
+                    }
+                }
+            });
+
+             //plg img
+            L.Control.Watermark = L.Control.extend({
+                onAdd: function (map) {
+                    var img = L.DomUtil.create('img');
+
+                    img.src = 'img/plgteam.png';
+                    img.style.width = '490px';
+
+                    return img;
+                },
+
+                onRemove: function (map) {
+
+                }
+            });
+
+            L.control.watermark = function (opts) {
+                return new L.Control.Watermark(opts);
+            }
+
+            L.control.watermark({
+                position: 'bottomleft'
+            }).addTo(map);
+
+
+
+        </script>
+
+        <script type="text/javascript" src="google-doc-url.js"></script>
+        <script type="text/javascript" src="scripts/tabletop.js"></script>
+        <script type="text/javascript" src="scripts/leaflet-providers.js"></script>
+        <script type="text/javascript" src="markers/leaflet.extra-markers.min.js"></script>
+        <script type="text/javascript" src="scripts/constants.js"></script>
+        <script type="text/javascript" src="scripts/jquery.csv.js"></script>
+        <script type="text/javascript" src="scripts/storymap.js"></script>
+
+    </body>
+</html>
